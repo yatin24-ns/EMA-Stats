@@ -1,1 +1,54 @@
+iT WOULD ALSO BE INTERETSING TO ASSES THE STRESS LEVELS OF THE PERSON ACTUALLY CONDUCTIONG TEH STDY LOL
 
+Problem statement - 
+
+We have three excel sheets that correspond to three survey responses in a EMA study, each study participant asnwers 3 times a day- 
+
+each participant can be identified using a unique device_id, further we know that these- survey one tries to find out what is their percieved workload  , survey 2 tries to figure out what is their cognitive fatigue, survey 3 tries to figure out what is their leisure quality, our work is to - 1. Arrage the data into a format that we cna feed into out analysis pipelines that runs the multi-level stat model 
+
+1. Find out a way to merge these three files so that they can give us one good file from which we can directly run our analysis- we will import all three files and make a fourth output file in which we will take the relevant informtion adn filter the rest - this fourth file will be the one on whihc we run our Multi-level analysis pipeline. 
+
+1.1 Firstly We should organise all the repsonses by date- all responeses collected on a day will be segregated from those on a different day (we will do this in the three original sheets independently )
+
+After all respones are segregated by date - on each date we will have some responses by many candidates in three separate sheets 
+
+1.2 There is a column for time (start and end) since in an EMA study we want the respnose to be in a certain window of time, we will be filtering out teh responses which were not made in time - for survey 1 this time is 1p.m. to 2p.m. - any response between 12:45 and 3 will be valid (we are a little lenient with the upper bound) similarly for survey 2 - the time given to participants was between 5p.m. to 6p.m.  - but any resposne between 4:45 to 7 will be valid similarly for survey 3- the time given was from 8p.m. to 9p.m. but any response between 7:45 to 10p.m. shall be valid. (The lower bound was also extended slightly for symmetry) Each survey details are in a separate file.
+
+
+(The way i want this data to be arranged is - in the original sheets wherever one day data starts you keep it otgether and then keep the rejected responses at the end and keep some demarcation in the end and in between categories and leave a line before each day end and next day start)
+
+Also i want ot see which indivisual responses are not having a device_id and/or which responses are empty 
+
+The reasoning is that not every day is the same , and some peopel may get off work earlier or later, might get off playing football earlier or later than average and this natural variance in behaviour should not exclude them from our analysis, so even though the point of a longitudinal EMA is to find out "what you are doing in the moment" when doing this across people with very different schedules and work constraints- the time bounds for surveys should not be very rigid, limiting and/or discouraging participant involvement. This fluidity in response is something that also helps us find out how big of a window is ideal for such kinds multi group longitudinal study.   (How? Just by seeing how many people in the outliers are [resent consistently over time we can get an idea of the cost of misse doppurtunity inherent withi out analysis) 
+
+1.2 After we have the rows of valid responses and invalid responses, we will export this to our 4th file  
+
+Each prticipant is linked to a unique device_id- after thsi we will create a data structure to store indivisual participant data alongside the data cumulatively for the entire cohort   - This is how the data structure wil be constructed- 
+
+participant number -- device_id -- date-- day number -- survey--1--data -- stats
+                                                                                       --survey--2-- data -- stats
+                                                                                       --survey--3-- data -- stats
+participant number -- device_id -- date-- day number -- survey--1--data -- stats
+                                                                                       --survey--2-- data -- stats
+                                                                                       --survey--3-- data -- stats
+...so on and so forth 
+
+
+The survey 1 has 6 columns rated from 1-100 (1 being the lowest to 100 being the highest ) 
+
+on which we have to run analysis - Mental demand: How much mental activity was required ? (thinking, deciding, remembering, etc.)	Physical demand: How much physical activity was required? (e.g., equipment handling, lab-work, walking, etc.)	Time Pressure: How much time pressure (strain due to urgency) did you feel from activities ?	Effort: How hard did you have to work (with your body and your mind) ?	Performance: How pleased were you with your performance?	Frustration level: How frustrated are you from the activities you had to do for work?
+
+The next column asking about sleep is something we will correlate with the next day so we will export this as it is to the new file - 
+
+The survey 2 has data in a likert scale whihc you have to assign scores and again run stats and then export them along with participant information into the new file 
+
+The surevy 3 has tehse fields "Did you engage in any leisure activities this evening?"	How satisfied are you with your leisure time this evening?	This evening, I was able to relax during my free time-	How detached do you feel from the fatigue from work?	This evening, I could decide for myself what to do.	This evening, I did something challenging or learned something new.	How fatigued do you feel right now?
+
+
+These are arranged on a 1-10 scale which i want to normalsise and find the intra person stats 
+
+So far we have only calcluated the indivisual stats for each persona dn not dealt with any population level stats or fitting ata ll - 
+
+Lets get this done first then we can proceed with 
+
+The code should be as small as possible , as simple as posisble and use external libraries only whne necessary and be easy to read  interpret 
